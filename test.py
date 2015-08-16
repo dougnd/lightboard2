@@ -3,7 +3,7 @@ import time
 import math
 
 alsaseq.client('Click', 1, 1, True)
-alsaseq.connectto(1,129,0)
+alsaseq.connectto(1,128,0)
 
 class SongRhythm:
     beatsPerMeasure = 4
@@ -93,9 +93,9 @@ def noteOn(time, v, instrument):
 alsaseq.start()
 
 s = SongSection("test", [
-    SongRhythm(4, 2, 120, 120, [(0,75), (1,76), (2,76), (3,76)]),
-    SongRhythm(4, 4, 120, 240, [(0,75), (1,76), (2,76), (3,76)]),
-    SongRhythm(4, 2, 240, 240, [(0,75), (1,76), (2,76), (3,76)]),
+    SongRhythm(4, 50, 220, 220, [(0,75), (1,76), (2,76), (3,76)]),
+    SongRhythm(4, 50, 220, 240, [(0,75), (1,76), (2,76), (3,76)]),
+    SongRhythm(4, 50, 240, 240, [(0,75), (1,76), (2,76), (3,76)]),
     ])
 
 
