@@ -121,24 +121,59 @@ alsaseq.start()
 
 
 
+introTempo = 95
+verseBeginTempo = 100
+verseEndTempo = 105
+chorusTempo = 115
+solo2Tempo = 225
+
+#introTempo = 120
+#verseBeginTempo = 120
+#verseEndTempo = 120
+#chorusTempo = 120
+#solo2Tempo = 120
+
 s = SongStructure([
         SongSection("Intro", [
-            SongRhythm(4, 1, 95, 95, [(i, 76) for i in range(4)] + [(0,50),(2,51)] ),
-            SongRhythm(4, 1, 95, 95, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
-            SongRhythm(4, 4, 95, 105, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, introTempo, introTempo, [(i, 76) for i in range(4)] + [(0,50),(2,51)] ),
+            SongRhythm(4, 1, introTempo, introTempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+            SongRhythm(4, 4, introTempo, verseBeginTempo, [(i, 76) for i in range(4)]),
         ]),
-        SongSection("Verse", [
-            SongRhythm(4, 11, 105, 105, [(i, 76) for i in range(4)]),
-            SongRhythm(4, 1, 105, 115, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        SongSection("Verse1", [
+            SongRhythm(4, 11, verseBeginTempo, verseEndTempo, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, verseEndTempo, chorusTempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
         ]),
-        SongSection("Chorus", [
-            SongRhythm(4, 17, 115, 115, [(i, 76) for i in range(4)]),
-            SongRhythm(4, 1, 115, 105, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        SongSection("Chorus1", [
+            SongRhythm(4, 18, chorusTempo, chorusTempo, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, chorusTempo, verseBeginTempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
         ]),
-        SongSection("Verse", [
-            SongRhythm(4, 11, 105, 105, [(i, 76) for i in range(4)]),
-            SongRhythm(4, 1, 105, 115, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
-        ])
+        SongSection("Verse2", [
+            SongRhythm(4, 11, verseBeginTempo, verseEndTempo, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, verseEndTempo, chorusTempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ]),
+        SongSection("Chorus2", [
+            SongRhythm(4, 12, chorusTempo, chorusTempo, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, chorusTempo, chorusTempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ]),
+        SongSection("Bridge1", [
+            SongRhythm(4, 24, chorusTempo, chorusTempo, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, chorusTempo, verseEndTempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ]),
+        SongSection("Solo1", [
+            SongRhythm(4, 7, verseEndTempo, verseEndTempo, [(i, 76) for i in range(4)]),
+        ]),
+        SongSection("Solo2", [
+            SongRhythm(4, 7, verseEndTempo, solo2Tempo, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, solo2Tempo, solo2Tempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ]),
+        SongSection("Bridge2", [
+            SongRhythm(4, 23, solo2Tempo, solo2Tempo, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, solo2Tempo, solo2Tempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ]),
+        SongSection("Chorus3", [
+            SongRhythm(4, 18, solo2Tempo, solo2Tempo, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, solo2Tempo, chorusTempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ]),
     ])
 
 """
