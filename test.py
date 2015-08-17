@@ -1,3 +1,16 @@
+import pyttsx
+
+"""
+e = pyttsx.init()
+for v in e.getProperty('voices'):
+    print v.id, v.languages, v.name
+
+e.setProperty('voice', 'english-us')
+e.say("If your system is already configured to load OSS drivers for your sound card then look at your current module loader configuration files. There will be entries for the OSS modules which will give you clues about which chipsets your sound cards have. Don't forget to disable these entries before reconfiguring things to load ALSA modules. This is a test.  How are you doing?")
+e.runAndWait()
+exit()
+"""
+
 import alsaseq
 import time
 import math
@@ -76,6 +89,20 @@ class SongStructure:
     sections = []
     def __init__(self, sections):
         self.sections =sections
+    def getAllHitsSecs(self):
+        currentTime = 0
+        allHits = []
+        for s in self.sections:
+            hits = s.getAllHitsSecs()
+            for h in hits:
+                allHits.append((currentTime + h[0], h[1]))
+            currentTime+=s.totalSecsLength()
+        return allHits
+    def totalSecsLength(self):
+        totalLength = 0
+        for s in self.sections:
+            totalLength+=s.totalSecsLength()
+        return totalLength
 
 def noteOff(time):
     time_split = math.modf(time)
@@ -92,11 +119,37 @@ def noteOn(time, v, instrument):
 
 alsaseq.start()
 
-s = SongSection("test", [
-    SongRhythm(4, 50, 220, 220, [(0,75), (1,76), (2,76), (3,76)]),
-    SongRhythm(4, 50, 220, 240, [(0,75), (1,76), (2,76), (3,76)]),
-    SongRhythm(4, 50, 240, 240, [(0,75), (1,76), (2,76), (3,76)]),
+
+
+s = SongStructure([
+        SongSection("Intro", [
+            SongRhythm(4, 1, 95, 95, [(i, 76) for i in range(4)] + [(0,50),(2,51)] ),
+            SongRhythm(4, 1, 95, 95, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+            SongRhythm(4, 4, 95, 105, [(i, 76) for i in range(4)]),
+        ]),
+        SongSection("Verse", [
+            SongRhythm(4, 11, 105, 105, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, 105, 115, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ]),
+        SongSection("Chorus", [
+            SongRhythm(4, 17, 115, 115, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, 115, 105, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ]),
+        SongSection("Verse", [
+            SongRhythm(4, 11, 105, 105, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, 105, 115, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ])
     ])
+
+"""
+s = SongSection("test", [
+    SongRhythm(4, 1, 120, 120, [(0,76), (0,50), (1,76), (2,76), (2,51), (3,76)]),
+    SongRhythm(4, 1, 120, 120, [(0,76), (0,50), (1,76), (1,51), (2,76), (2,52), (3,76), (3,53)]),
+    SongRhythm(4, 50, 120, 120, [(0,76), (1,76), (2,76), (3,76)]),
+    SongRhythm(4, 50, 120, 120, [(0,76), (1,76), (2,76), (3,76)]),
+    SongRhythm(4, 50, 120, 120, [(0,76), (1,76), (2,76), (3,76)]),
+    ])
+"""
 
 
 for h in s.getAllHitsSecs():
