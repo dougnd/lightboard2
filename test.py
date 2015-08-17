@@ -125,7 +125,7 @@ introTempo = 95
 verseBeginTempo = 100
 verseEndTempo = 105
 chorusTempo = 115
-solo2Tempo = 225
+solo2Tempo = 125
 
 #introTempo = 120
 #verseBeginTempo = 120
