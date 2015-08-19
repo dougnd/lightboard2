@@ -40,18 +40,44 @@ def buttonPress():
     buttonQueue.put(request.form['buttonId'])
     return "Thanks!"
 
+def manageButtons(master):
+    while True:
+        btn = buttonQueue.get()
+        print 'got ' + btn + '!'
+        continue
+        if btn == 'prevProgram':
+            master.prevProgram()
+        elif btn == 'nextProgram':
+            master.nextProgram()
+        elif btn == 'lightBtn':
+            master.lightBtn()
+        elif btn == 'darkBtn':
+            master.darkBtn()
+        elif btn == '0':
+            master.btn(0)
+        elif btn == '1':
+            master.btn(1)
+        elif btn == '2':
+            master.btn(2)
+        elif btn == '3':
+            master.btn(3)
+        elif btn == '4':
+            master.btn(4)
+
 
 def doStuff():
     while True:
         print connectedDevices
-        print buttonQueue.qsize()
         time.sleep(4)
     
     
 
 
 if __name__ == "__main__":
-    t = threading.Thread(target=app.run, kwargs={'debug': False})
+    t = threading.Thread(target=app.run, kwargs={'debug': False, 'host':'0.0.0.0'})
+    t.daemon = True
+    t.start()
+    t = threading.Thread(target=manageButtons, kwargs={'master': None})
     t.daemon = True
     t.start()
     doStuff()
