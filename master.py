@@ -117,13 +117,12 @@ class Master:
 
                 udmxSetChannelRange = 2
                 bmRequestType = 0x40
-                #targetFps = 24.0
-                targetFps = 1.0
+                targetFps = 24.0
+                #targetFps = 1.0
                 t = time.time()
 
                 print "Ready."
                 while True:
-                    print "Hi!!"
                     for name, l in allLights.items():
                         l.update()
 
