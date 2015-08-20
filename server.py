@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from master import Master
 import json
 import sys
 import threading, Queue
@@ -14,9 +15,11 @@ class ConnectedDevices(dict):
         for (d, t) in self.items():
             if time.time()-t > self.timeout:
                 self.pop(d)
-connectedDevices = ConnectedDevices()
 
+connectedDevices = ConnectedDevices()
 buttonQueue = Queue.Queue()
+getProgramName = lambda : "Error: master unconnected"
+
 
 @app.route("/")
 def hello():
@@ -77,10 +80,14 @@ if __name__ == "__main__":
     t = threading.Thread(target=app.run, kwargs={'debug': False, 'host':'0.0.0.0'})
     t.daemon = True
     t.start()
-    t = threading.Thread(target=manageButtons, kwargs={'master': None})
+
+    m = Master()
+    t = threading.Thread(target=manageButtons, kwargs={'master': m})
     t.daemon = True
     t.start()
-    doStuff()
+
+    m.runReal()
+    #doStuff()
 
         
 
