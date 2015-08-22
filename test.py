@@ -1,4 +1,14 @@
-import pyttsx
+
+import programs.common
+
+p = programs.common.ClickTrackProgram([])
+
+p.clickThreadRun()
+
+exit()
+
+
+#import pyttsx
 
 """
 e = pyttsx.init()

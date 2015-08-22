@@ -3,5 +3,6 @@ programList = [
     ('Test Program', 'testProgram', 'TestProgram'),
     ('Machinehead', 'machinehead', 'MachineheadProgram'),
     ('I Am One', 'iamone', 'IAmOneProgram'),
-    ('Basic', 'basicProgram', 'BasicProgram')
+    ('Basic', 'basicProgram', 'BasicProgram'),
+    ('ClickTest', 'common', 'ClickTrackProgram')
 ]

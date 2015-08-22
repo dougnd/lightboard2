@@ -25,7 +25,9 @@ getProgramName = lambda : "Error: master unconnected"
 def hello():
     return "Hello World!"
 
-
+@app.route("/getProgramName")
+def programName():
+    return json.dumps(getProgramName())
 
 @app.route("/connected", methods=['GET', 'POST'])
 def heartbeat():
@@ -46,14 +48,13 @@ def buttonPress():
 def manageButtons(master):
     while True:
         btn = buttonQueue.get()
-        print 'got ' + btn + '!'
-        continue
+        print "[server] got press: " + btn
         if btn == 'prevProgram':
             master.prevProgram()
         elif btn == 'nextProgram':
             master.nextProgram()
-        elif btn == 'lightBtn':
-            master.lightBtn()
+        elif btn == 'frontBtn':
+            master.frontBtn()
         elif btn == 'darkBtn':
             master.darkBtn()
         elif btn == '0':
@@ -85,6 +86,8 @@ if __name__ == "__main__":
     t = threading.Thread(target=manageButtons, kwargs={'master': m})
     t.daemon = True
     t.start()
+
+    getProgramName = m.getProgramName
 
     m.runReal()
     #doStuff()

@@ -34,7 +34,7 @@ class IAmOneProgram(common.Program):
     def intro(self, n):
         if n == 1:
             self.dark()
-            self.allLights['backSpencer']['light'].setController(
+            self.allLights['backSpencer'].setController(
                 lights.FadeInController(
                     lights.ConstantRGBController(
                         40, 0, 255
@@ -42,7 +42,7 @@ class IAmOneProgram(common.Program):
                 )
             )
         if n == 2:
-            self.allLights['backDoug']['light'].setController(
+            self.allLights['backDoug'].setController(
                 lights.FadeInController(
                     lights.ConstantRGBController(
                         40, 0, 255
@@ -69,13 +69,13 @@ class IAmOneProgram(common.Program):
         if n == 1:
             for name, l in self.allLights.items():
                 if name in lightsToEnable:
-                    l['light'].setController(HitController(
+                    l.setController(HitController(
                         blueLight()))
                 else:
-                    l['light'].setController(HitController(lights.FadeInController(
+                    l.setController(HitController(lights.FadeInController(
                         lights.ConstantRGBController(0,0,0), 1.0)))
         if n == 2:
-            self.allLights['frontSpencer']['light'].setController(
+            self.allLights['frontSpencer'].setController(
                 HitController(lights.FadeInController(
                     lights.ConstantRGBController(
                         180, 50, 255
@@ -85,9 +85,9 @@ class IAmOneProgram(common.Program):
         if n > 2:
             for name, l in self.allLights.items():
                 if n%2 == 1:
-                    l['light'].controller.preHit()
+                    l.controller.preHit()
                 else:
-                    l['light'].controller.hit()
+                    l.controller.hit()
 
     def chorus(self, n):
         def redLight():
@@ -102,10 +102,10 @@ class IAmOneProgram(common.Program):
                 ), .2
             )
         for name, l in self.allLights.items():
-            l['light'].setController(redLight())
-            #l['light'].controller.lastRGB = (255,255,255)
+            l.setController(redLight())
+            #l.controller.lastRGB = (255,255,255)
 
-        self.allLights['frontSpencer']['light'].setController(
+        self.allLights['frontSpencer'].setController(
             lights.FadeInController(
                 lights.ConstantRGBController(
                     255, 255, 255
@@ -126,15 +126,15 @@ class IAmOneProgram(common.Program):
                 ), .2
             )
         for name, l in self.allLights.items():
-            l['light'].setController(greenLight())
-            #l['light'].controller.lastRGB = (255,255,255)
+            l.setController(greenLight())
+            #l.controller.lastRGB = (255,255,255)
 
     def outro(self, n):
         for name, l in self.allLights.items():
-            l['light'].setController(lights.FadeInController(
+            l.setController(lights.FadeInController(
                 lights.ConstantRGBController(0,0,0), 2.0
             ))
-            l['light'].controller.lastRGB = (255,255,255)
+            l.controller.lastRGB = (255,255,255)
 
 
     def buttonPressed(self, n):

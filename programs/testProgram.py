@@ -3,14 +3,14 @@ import lights, math, common
 class TestProgram(common.Program):
     def cycle(self):
         for name, l in self.allLights.items():
-            l['light'].setController(lights.SineRGBController(
+            l.setController(lights.SineRGBController(
                 (1,0, 127, 127),
                 (1,2.0*math.pi/3.0, 127, 127),
                 (1,4.0*math.pi/3.0, 127, 127)))
 
     def cycle2(self):
         for name, l in self.allLights.items():
-            l['light'].setController(lights.SineRGBController(
+            l.setController(lights.SineRGBController(
                 (1,0, 1e6, 0),
                 (1,2.0*math.pi/3.0, 1e6, 0),
                 (1,4.0*math.pi/3.0, 1e6, 0)))
@@ -20,7 +20,7 @@ class TestProgram(common.Program):
         controllers = lights.getChaseControllers(n, .25, (255,255,255), (0,0,0))
         i=0
         for name, l in self.allLights.items():
-            l['light'].setController(controllers[i])
+            l.setController(controllers[i])
             i+=1
 
     def buttonPressed(self, n):

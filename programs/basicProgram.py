@@ -7,7 +7,7 @@ class BasicProgram(common.Program):
 
     def cycle(self):
         for name, l in self.allLights.items():
-            l['light'].setController(lights.SineRGBController(
+            l.setController(lights.SineRGBController(
                 (1,0, 1e6, 0),
                 (1,2.0*math.pi/3.0, 1e6, 0),
                 (1,4.0*math.pi/3.0, 1e6, 0)))
@@ -86,13 +86,13 @@ class BasicProgram(common.Program):
 
     def special(self, n):
         if n%2 == 1:
-            self.lastSpencerController = self.allLights['frontSpencer']['light'].controller
+            self.lastSpencerController = self.allLights['frontSpencer'].controller
             self.setLights(['frontSpencer'], lambda: lights.FadeInController(lights.ConstantRGBController(255,255,255),1.0))
         else:
-            self.allLights['frontSpencer']['light'].controller = self.lastSpencerController
+            self.allLights['frontSpencer'].controller = self.lastSpencerController
 
     def test(self):
-        self.allLights['frontSpencer']['light'].setController(lights.getRGBSequenceController([
+        self.allLights['frontSpencer'].setController(lights.getRGBSequenceController([
             ((0,0,0), 1.0),
             ((255,0,0), 1.0),
             ((0,255,0), 1.0),

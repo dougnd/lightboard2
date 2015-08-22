@@ -57,11 +57,11 @@ class MachineheadProgram(common.Program):
         print "intro with n = " + str(n)
         if n == 1:
             print "fisrt intro"
-            self.allLights['backTanner']['light'].setController(
+            self.allLights['backTanner'].setController(
                 lights.FadeInController(
                     lights.ConstantRGBController(255, 0, 0), 0.5
                 ))
-            self.allLights['frontTanner']['light'].setController(
+            self.allLights['frontTanner'].setController(
                 lights.FadeInController(
                     lights.ConstantRGBController(255, 255, 255), 0.5
                 ))
@@ -72,7 +72,7 @@ class MachineheadProgram(common.Program):
                 ((0, 0, 0), 1.0)
             ])
             for name, l in self.allLights.items():
-                l['light'].setController(c)
+                l.setController(c)
         def bassLights():
             return lights.getRGBSequenceController(
                                 [((255,255,255), self.spb*0.5),

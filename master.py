@@ -38,6 +38,11 @@ class Master:
 
     def loadProgram(self, index):
         #print 'loading ' + str(self.allPrograms[index])
+
+        #reset old program:
+        if self.currentProgram:
+            self.currentProgram.reset()
+
         self.currentProgramIndex = index
         currentProgramModule = __import__('programs.' +
                                           self.allPrograms[index][1],
@@ -102,40 +107,28 @@ class Master:
         for name, l in allLights.items():
             l.dmxArray = self.dmxArray
 
+        from ola.ClientWrapper import ClientWrapper
+        targetFps = 24.0
+        TICK_INTERVAL = 1000.0/targetFps
+        wrapper = None
 
-        import usb.core
-        import usb.util
+        def DmxSent(state):
+            if not state.Succeeded():
+                print "Error!"
 
-# udmx stuff:
+        def SendDMXFrame():
+            wrapper.AddEvent(TICK_INTERVAL, SendDMXFrame)
 
-        while True:
-            try:
-                dev = usb.core.find(idVendor=0x16C0, idProduct=0x05DC)
+            for name, l in allLights.items():
+                l.update()
 
-                if dev is None:
-                    raise ValueError('Device not found')
+            wrapper.Client().SendDmx(0, self.dmxArray, DmxSent)
 
-                udmxSetChannelRange = 2
-                bmRequestType = 0x40
-                targetFps = 24.0
-                #targetFps = 1.0
-                t = time.time()
+        wrapper = ClientWrapper()
+        wrapper.AddEvent(TICK_INTERVAL, SendDMXFrame)
+        wrapper.Run()
+        print "What??"
 
-                print "Ready."
-                while True:
-                    for name, l in allLights.items():
-                        l.update()
 
-                    dev.ctrl_transfer(bmRequestType, udmxSetChannelRange,
-                            len(self.dmxArray), 0, self.dmxArray)
-
-                    wait = 1.0/targetFps - time.time()+t
-                    if wait > 0:
-                        time.sleep(wait)
-                    t = time.time()
-            except (ValueError, usb.core.USBError):
-                print "USB Error cannot find DMX controller!"
-                time.sleep(1)
-                print "Checking again..."
 
 
