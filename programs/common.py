@@ -82,14 +82,28 @@ class ClickTrackProgram(Program):
         self.clickStartTime = time.time()
         alsaseq.start()
 
+        """
+        print "-=---------------------------"
+        print self.songStructure.totalNumMeasures()
+        print self.songStructure.totalSecsLength()
+        print len(clicks)
+        print "-=---------------------------"
+        """
+        totalSongLenSecs = self.songStructure.totalSecsLength()
+
         for c in clicks:
             alsaseq.output(noteOn(c[0], 127, c[1] ));
             if self.stopClick:
                 break
-            if c[0] > (time.time() - self.clickStartTime) + lookAheadTime:
+            while c[0] > (time.time() - self.clickStartTime) + lookAheadTime:
                 time.sleep(.5)
+
+        while (time.time() - self.clickStartTime) < totalSongLenSecs:
+            time.sleep(.5)
+        print "done with song!"
         alsaseq.stop()
         self.clickStartTime = 0
+        self.stopClick = True
 
     def eventThreadRun(self):
         # convert measure, beat to sec
@@ -102,7 +116,7 @@ class ClickTrackProgram(Program):
 
 
         # wait for clicktrack:
-        while self.clickStartTime == 0 and not stopClick:
+        while self.clickStartTime == 0 and not self.stopClick:
             time.sleep(0.01)
 
         for e in eventsSecs:
@@ -113,6 +127,8 @@ class ClickTrackProgram(Program):
             e[1]()
             if self.stopClick:
                 break
+        while not self.stopClick:
+            time.sleep(0.5)
         self.dark()
 
     def reset(self):

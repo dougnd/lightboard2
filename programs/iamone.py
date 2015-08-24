@@ -1,36 +1,96 @@
 import common, math, lights, random, time
-
-class HitController(lights.BasicController):
-    def __init__(self, controller):
-        self.fadeTime = .1
-        self.controller = controller
-        self.hits = 3
-        self.pre_hit_time = -1e5
-        self.hit_time = -1e5
-
-    def setPreviousController(self, c):
-        self.controller.setPreviousController(c)
-
-    def preHit(self):
-        self.pre_hit_time = time.time()
-
-    def hit(self):
-        self.hit_time = time.time()
-
-    def getRGB(self):
-        c = self.controller.getRGB()
-        period = (self.hit_time - self.pre_hit_time)/12
-        period = max(.0001, period)
-        t = time.time() - self.hit_time
-        dt = t % period
-        h = t / period
-        if h < self.hits and dt < self.fadeTime:
-            return lights.mixColors(c, (255,255,255), dt/self.fadeTime)
-        else:
-            return c
+from clicktrack import *
 
 
-class IAmOneProgram(common.Program):
+
+class IAmOneProgram(common.ClickTrackProgram):
+    tempo = 80
+    songStructure = SongStructure([
+        SongSection("Intro", [
+            SongRhythm(4, 1, tempo, tempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+            SongRhythm(4, 6, tempo, tempo, [(i, 76) for i in range(4)])
+        ]),
+        SongSection("Verse1", [
+            SongRhythm(4, 21, tempo, tempo, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, tempo, tempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ]),
+        SongSection("Chorus1", [
+            SongRhythm(4, 7, tempo, tempo, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, tempo, tempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ]),
+        SongSection("Verse2", [
+            SongRhythm(4, 21, tempo, tempo, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, tempo, tempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ]),
+        SongSection("Chorus2", [
+            SongRhythm(4, 7, tempo, tempo, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, tempo, tempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ]),
+        SongSection("Bridge", [
+            SongRhythm(4, 7, tempo, tempo, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, tempo, tempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ]),
+        SongSection("Chorus3", [
+            SongRhythm(4, 15, tempo, tempo, [(i, 76) for i in range(4)]),
+            SongRhythm(4, 1, tempo, tempo, [(i, 76) for i in range(4)] + [(i, 50+i) for i in range(4)] ),
+        ]),
+        SongSection("Verse3", [
+            SongRhythm(4, 22, tempo, tempo, [(i, 76) for i in range(4)]),
+        ])])
+
+    def __init__(self, *args, **kwargs):
+        def fadeLights(lightList, r,g,b, t):
+            def fun():
+                self.setLights(lightList, lambda: lights.FadeInController(
+                    lights.ConstantRGBController(r,g,b), t))
+            return fun
+        def fadeLightsExcept(lightList, r,g,b, t):
+            def fun():
+                self.setLightsExcept(lightList, lambda:  lights.FadeInController(
+                    lights.ConstantRGBController(r,g,b), t))
+            return fun
+        super(IAmOneProgram, self).__init__(*args, **kwargs)
+        self.events = [
+            # Intro
+            (1, 0, fadeLights(['backSpencer'], 0,0,255,4)),
+            (1, 0, fadeLights(['frontSpencer'], 100,0,100,4)),
+            # verse
+            (7, 0, fadeLights(['backDoug'], 0,0,255,1)),
+            (7, 0, fadeLights(['backTanner', 'backTravis'], 0,0,200,8)),
+            (13, 0, fadeLights(['frontSpencer'], 200,200,200,1)),
+            (13, 0, fadeLights(['rear1', 'rear2', 'rear3', 'rear4'], 0,0,255,1)),
+            (13, 0, fadeLights(['rear1', 'rear2', 'rear3', 'rear4'], 0,0,255,1)),
+            # chorus
+            (29, 0, fadeLightsExcept(['frontSpencer'], 255,100,0,0)),
+            (29, 0, fadeLights(['frontSpencer'], 255,255,255,1)),
+            # verse
+            (37, 0, fadeLightsExcept(['frontSpencer'], 0,0,150,0)),
+            (37, 0, fadeLights(['frontSpencer'], 150,150,255,1)),
+            # chorus
+            (59, 0, fadeLightsExcept(['frontSpencer'], 255,100,0,0)),
+            (59, 0, fadeLights(['frontSpencer'], 255,255,255,1)),
+            # bridge
+            (67, 0, fadeLightsExcept(['frontTanner'], 50,255,50,0)),
+            (67, 0, fadeLights(['frontTanner'], 255,255,255,1)),
+            # bridge2
+            (75, 0, fadeLightsExcept(['frontTanner'], 255,100,0,0)),
+            (75, 0, fadeLights(['frontTanner'], 255,255,255,1)),
+            # chorus
+            (83, 0, fadeLightsExcept(['frontSpencer'], 255,100,0,0)),
+            (83, 0, fadeLights(['frontSpencer'], 255,255,255,1)),
+            # verse
+            (91, 0, fadeLightsExcept(['frontSpencer'], 0,0,150,0)),
+            (91, 0, fadeLights(['frontSpencer'], 150,150,255,1))
+
+        ]
+
+
+
+
+
+
+   
+"""
     def intro(self, n):
         if n == 1:
             self.dark()
@@ -155,4 +215,5 @@ class IAmOneProgram(common.Program):
         except KeyError:
             pass
         self.lastn = n
+        """
 

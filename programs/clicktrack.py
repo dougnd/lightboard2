@@ -94,6 +94,11 @@ class SongStructure:
             i+=1
         return currentTime + self.sections[i].measureBeatToSec(measure-currentMeasure, beat)
 
+    def totalNumMeasures(self):
+        totalMeasures = 0
+        for s in self.sections:
+            totalMeasures+=s.totalNumMeasures()
+        return totalMeasures
 
     def totalSecsLength(self):
         totalLength = 0
